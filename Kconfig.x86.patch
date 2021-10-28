@@ -1,0 +1,20 @@
+--- Kconfig.x86	2021-10-27 12:15:29.936930000 +0200
++++ Kconfig.x86_patched	2021-10-27 10:43:32.229875000 +0200
+@@ -72,7 +72,7 @@
+ config ELAN_CPUFREQ
+ 	tristate "AMD Elan SC400 and SC410"
+ 	depends on MELAN
+-	---help---
++	help
+ 	  This adds the CPUFreq driver for AMD Elan SC400 and SC410
+ 	  processors.
+ 
+@@ -87,7 +87,7 @@
+ config SC520_CPUFREQ
+ 	tristate "AMD Elan SC520"
+ 	depends on MELAN
+-	---help---
++	help
+ 	  This adds the CPUFreq driver for AMD Elan SC520 processor.
+ 
+ 	  For details, take a look at <file:Documentation/cpu-freq/>.

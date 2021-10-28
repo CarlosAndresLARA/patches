@@ -1,0 +1,13 @@
+--- Kernel_Makefile	2021-10-27 12:07:56.117948000 +0200
++++ Kernel_Makefile_patched	2021-10-26 15:45:18.658087000 +0200
+@@ -14,6 +14,10 @@
+ 
+ obj-$(CONFIG_BPFILTER) += usermode_driver.o
+ obj-$(CONFIG_MODULES) += kmod.o
++
++# gem5 hooks for streamline support
++obj-y += m5struct.o
++
+ obj-$(CONFIG_MULTIUSER) += groups.o
+ 
+ ifdef CONFIG_FUNCTION_TRACER

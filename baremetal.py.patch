@@ -1,0 +1,40 @@
+--- baremetal.py	2021-10-27 13:37:10.559362000 +0200
++++ baremetal_DVFS.py	2021-10-27 15:06:07.173113000 +0200
+@@ -127,7 +127,7 @@
+     system.cpu_cluster = [
+         devices.CpuCluster(system,
+                            args.num_cores,
+-                           args.cpu_freq, "1.0V",
++                           args.cpu_freq, args.cpu_voltage,
+                            *cpu_types[args.cpu]),
+     ]
+ 
+@@ -150,6 +150,10 @@
+     system.workload = workload_class(
+         object_file, system)
+ 
++    if args.dvfs:
++        system.dvfs_handler.domains = [system.cpu_cluster[0].clk_domain]
++        system.dvfs_handler.enable = args.dvfs
++
+     return system
+ 
+ def run(args):
+@@ -190,7 +194,7 @@
+     parser.add_argument("--cpu", type=str, choices=list(cpu_types.keys()),
+                         default="atomic",
+                         help="CPU model to use")
+-    parser.add_argument("--cpu-freq", type=str, default="4GHz")
++    parser.add_argument("--cpu-freq", nargs="+", default="4GHz")
+     parser.add_argument("--num-cores", type=int, default=1,
+                         help="Number of CPU cores")
+     parser.add_argument("--machine-type", type=str,
+@@ -236,6 +240,8 @@
+              "sets max_insts_all_threads for cpus 0, 1, 3, 5 and 7 "
+              "Direct parameters of the root object are not accessible, "
+              "only parameters of its children.")
++    parser.add_argument("--cpu-voltage", nargs="+", default="1.0V", help="CPU voltage(s).")
++    parser.add_argument("--dvfs", action="store_true", help="Enable the DVFS Handler.")
+ 
+     args = parser.parse_args()
+ 

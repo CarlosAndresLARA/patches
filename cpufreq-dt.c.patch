@@ -1,0 +1,8 @@
+329c329
+< 		priv->cdev = of_cpufreq_power_cooling_register(np,
+---
+> 		/*priv->cdev = of_cpufreq_power_cooling_register(np,
+337c337
+< 		}
+---
+> 		}*/

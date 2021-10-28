@@ -1,0 +1,8 @@
+539c539
+< 		cdev[cur_cluster] = of_cpufreq_power_cooling_register(np,
+---
+> 		/*cdev[cur_cluster] = of_cpufreq_power_cooling_register(np,
+546c546
+< 		}
+---
+> 		}*/

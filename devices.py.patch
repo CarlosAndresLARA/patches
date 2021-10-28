@@ -1,0 +1,12 @@
+--- devices.py	2021-10-27 13:37:10.559362000 +0200
++++ devices.py_patched	2021-10-22 15:39:57.142038000 +0200
+@@ -118,7 +118,8 @@
+ 
+         self.voltage_domain = VoltageDomain(voltage=cpu_voltage)
+         self.clk_domain = SrcClockDomain(clock=cpu_clock,
+-                                         voltage_domain=self.voltage_domain)
++                                         voltage_domain=self.voltage_domain,
++                                         domain_id=system.numCpuClusters())
+ 
+         self.cpus = [ self._cpu_type(cpu_id=system.numCpus() + idx,
+                                      clk_domain=self.clk_domain)

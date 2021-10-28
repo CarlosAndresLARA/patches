@@ -1,0 +1,8 @@
+281c281
+< 		cpud->cdev = of_cpufreq_cooling_register(np, policy);
+---
+> 		/*cpud->cdev = of_cpufreq_cooling_register(np, policy);
+288c288
+< 		}
+---
+> 		}*/

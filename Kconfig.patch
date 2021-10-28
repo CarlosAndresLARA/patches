@@ -1,0 +1,15 @@
+--- Kconfig	2021-10-27 12:07:50.890050000 +0200
++++ Kconfig_patched	2021-10-26 16:15:04.429018000 +0200
+@@ -359,6 +359,12 @@
+ 	help
+ 	  Support for Memory Mapped IO Fixed clocks
+ 
++config GEM5_CPUFREQ_CLK
++	bool "Clk driver for GEM5 Platform"
++	help
++	  Enable clk hardware for cpufreq in gem5 platforms
++
++
+ source "drivers/clk/actions/Kconfig"
+ source "drivers/clk/analogbits/Kconfig"
+ source "drivers/clk/baikal-t1/Kconfig"

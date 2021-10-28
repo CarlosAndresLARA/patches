@@ -1,0 +1,66 @@
+
+
+2021-10-27 13:14 diff -u -wall cpufreq_governor.c cpufreq_governor.c_patched Page 1
+
+
+--- cpufreq_governor.c	2021-10-27 12:15:29.936930000 +0200
++++ cpufreq_governor.c_patched	2021-10-27 10:57:44.051117000 +0200
+@@ -22,6 +22,8 @@
+ 
+ #include "cpufreq_governor.h"
+ 
++#define CPUFREQ_DBS_MIN_SAMPLING_INTERVAL	(2 * TICK_NSEC / NSEC_PER_USEC)
++
+ static DEFINE_PER_CPU(struct cpu_dbs_info, cpu_dbs);
+ 
+ static DEFINE_MUTEX(gov_dbs_data_mutex);
+@@ -47,11 +49,15 @@
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+ 	struct policy_dbs_info *policy_dbs;
++	unsigned int sampling_interval;
+ 	int ret;
+-	ret = sscanf(buf, "%u", &dbs_data->sampling_rate);
+-	if (ret != 1)
++
++	ret = sscanf(buf, "%u", &sampling_interval);
++	if (ret != 1 || sampling_interval < CPUFREQ_DBS_MIN_SAMPLING_INTERVAL)
+ 		return -EINVAL;
+ 
++	dbs_data->sampling_rate = sampling_interval;
++
+ 	/*
+ 	 * We are operating under dbs_data->mutex and so the list and its
+ 	 * entries can't be freed concurrently.
+@@ -342,7 +348,8 @@
+ 	for_each_cpu(i, policy->cpus)
+ 		cpufreq_remove_update_util_hook(i);
+ 
+-	synchronize_sched();
++	//synchronize_sched();
++	synchronize_rcu();
+ }
+ 
+ static struct policy_dbs_info *alloc_policy_dbs_info(struct cpufreq_policy *policy,
+@@ -430,7 +437,14 @@
+ 	if (ret)
+ 		goto free_policy_dbs_info;
+ 
+-	dbs_data->sampling_rate = cpufreq_policy_transition_delay_us(policy);
++	/*
++	 * The sampling interval should not be less than the transition latency
++	 * of the CPU and it also cannot be too small for dbs_update() to work
++	 * correctly.
++	 */
++	dbs_data->sampling_rate = max_t(unsigned int,
++					CPUFREQ_DBS_MIN_SAMPLING_INTERVAL,
++					cpufreq_policy_transition_delay_us(policy));
+ 
+ 	if (!have_governor_per_policy())
+ 		gov->gdbs_data = dbs_data;
+
+
+
+
+
+
