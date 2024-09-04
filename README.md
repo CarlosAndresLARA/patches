@@ -45,4 +45,8 @@ patch linux/kernel/Makefile < patches/Kernel_Makefile.patch
 cp linux-gem5/arch/arm64/configs/gem5_defconfig linux/arch/arm64/configs/
 ```
 
+**5. Configure and build the kernel:**
+
+The detailed process to configure and build the kernel can be found in http://daystrom.gem5.org/ARM_Kernel
+
 **That's it!**
